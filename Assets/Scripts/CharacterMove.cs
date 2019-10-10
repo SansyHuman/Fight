@@ -13,7 +13,9 @@ public class CharacterMove : MonoBehaviour
     private Transform characterTr;
     private Rigidbody2D rb;
     private GameObject self;
+
     private CharacterFeet feet;
+    private CharacterAttack punch;
 
     private void Awake()
     {
@@ -22,7 +24,9 @@ public class CharacterMove : MonoBehaviour
         characterTr = transform;
         rb = GetComponent<Rigidbody2D>();
         self = gameObject;
+
         feet = GetComponentInChildren<CharacterFeet>();
+        punch = GetComponent<CharacterAttack>();
     }
 
     private void Update()
@@ -49,9 +53,29 @@ public class CharacterMove : MonoBehaviour
     private void MoveCharacter(float deltaTime)
     {
         float horzInput = Input.GetAxis("Horizontal");
-        rb.velocity = new Vector2(horzInput * speed, rb.velocity.y);
 
-        if (Input.GetButton("Jump") && isLanding)
+        if (punch.IsAttacking && isLanding)
+        {
+            float xVel = rb.velocity.x;
+            if (xVel >= 0)
+            {
+                xVel -= 30 * deltaTime;
+                if (xVel < 0)
+                    xVel = 0;
+            }
+            else
+            {
+                xVel += 30 * deltaTime;
+                if (xVel > 0)
+                    xVel = 0;
+            }
+
+            rb.velocity = new Vector2(xVel, rb.velocity.y);
+        }
+        else
+            rb.velocity = new Vector2(horzInput * speed, rb.velocity.y);
+
+        if (Input.GetButton("Jump") && isLanding && !punch.IsAttacking)
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
     }
 
