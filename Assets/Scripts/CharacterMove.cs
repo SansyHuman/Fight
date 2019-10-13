@@ -54,7 +54,7 @@ public class CharacterMove : MonoBehaviour
     {
         float horzInput = Input.GetAxis("Horizontal");
 
-        if (punch.IsAttacking && isLanding)
+        if ((punch.IsAttacking && isLanding )|| anim.GetBool("isCrouching") == true)
         {
             float xVel = rb.velocity.x;
             if (xVel >= 0)
@@ -77,6 +77,11 @@ public class CharacterMove : MonoBehaviour
 
         if (Input.GetButton("Jump") && isLanding && !punch.IsAttacking)
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+
+        if (Input.GetButton("Crouch") && isLanding && !punch.IsAttacking)
+            anim.SetBool("isCrouching", true);
+        else
+            anim.SetBool("isCrouching", false);
     }
 
     private void OnCollisionStay2D(Collision2D collision)
