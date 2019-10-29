@@ -7,6 +7,7 @@ public class CharacterMove : MonoBehaviour
     [SerializeField] [Range(0, 9)] private float speed = 3f;
     [SerializeField] [Range(0, 500)] private float jumpForce = 80f;
     private bool isLanding = false;
+    private bool isCrouching = false;
 
     private Animator anim;
     private SpriteRenderer sprite;
@@ -40,6 +41,7 @@ public class CharacterMove : MonoBehaviour
             anim.SetBool("isWalking", false);
 
         anim.SetBool("isLanding", isLanding);
+        anim.SetBool("isCrouching", isCrouching);
         anim.SetBool("isFallingDown", rb.velocity.y <= 0);
     }
 
@@ -54,7 +56,7 @@ public class CharacterMove : MonoBehaviour
     {
         float horzInput = Input.GetAxis("Horizontal");
 
-        if (punch.IsAttacking && isLanding)
+        if ((punch.IsAttacking && isLanding )|| isCrouching)
         {
             float xVel = rb.velocity.x;
             if (xVel >= 0)
@@ -77,6 +79,11 @@ public class CharacterMove : MonoBehaviour
 
         if (Input.GetButton("Jump") && isLanding && !punch.IsAttacking)
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+
+        if (Input.GetButton("Crouch") && isLanding && !punch.IsAttacking)
+            isCrouching = true;
+        else
+            isCrouching = false;
     }
 
     private void OnCollisionStay2D(Collision2D collision)
