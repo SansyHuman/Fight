@@ -20,12 +20,14 @@ public class Character : MonoBehaviour, IDamageGettable
 
     public float Health => health;
 
+    private Animator anim;
     private Transform chrTransform;
     private Rigidbody2D rb2D;
     private GameObject self;
 
     private void Awake()
     {
+        anim = GetComponent<Animator>();
         chrTransform = transform;
         rb2D = GetComponent<Rigidbody2D>();
         self = gameObject;
@@ -44,6 +46,28 @@ public class Character : MonoBehaviour, IDamageGettable
     public void OnDeath()
     {
 
+    }
+
+    private void Update()
+    {
+        float xVel = rb2D.velocity.x;
+        float absVel = Mathf.Abs(xVel);
+        if (Mathf.Abs(xVel) > 0.0001f)
+        {
+            anim.SetBool("isWalking", true);
+            anim.SetFloat("walkSpeed", absVel * 2f / speed);
+
+            Vector3 scale = chrTransform.localScale;
+            if (xVel < 0)
+                scale.x = -1;
+            else
+                scale.x = 1;
+            chrTransform.localScale = scale;
+        }
+        else
+        {
+            anim.SetBool("isWalking", false);
+        }
     }
 
     private void FixedUpdate()
