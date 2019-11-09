@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Script of all characters
+/// </summary>
 public class Character : MonoBehaviour, IDamageGettable
 {
     [SerializeField] private float health;
     [SerializeField] [Range(0.0001f, 30)] private float speed = 3f;
     [SerializeField] [Range(0.0001f, 60)] private float acceleration = 6f;
-    [SerializeField] [Range(0, 1)] private float airAccelerationMultiplier = 0.7f;
-    [SerializeField] [Range(0.0001f, 120)] private float drag = 12f;
+    [SerializeField] [Range(0, 1)] private float airAccelerationMultiplier = 0.7f; // Acceleration multiplier when the character is in air.
+    [SerializeField] [Range(0.0001f, 120)] private float drag = 12f; // Drag acceleration when the movement key is not pressing.
     [SerializeField] [Range(0.0001f, 500)] private float jumpForce = 80f;
 
     [SerializeField] private KeyCode moveLeft = KeyCode.LeftArrow;
@@ -18,11 +21,15 @@ public class Character : MonoBehaviour, IDamageGettable
 
     private bool alive = true;
 
+    private bool isLanding = false;
+
+    /// <value>Override of <see cref="IDamageGettable.Health"/>. Gets the health of the object.</value>
     public float Health => health;
 
     private Animator anim;
     private Transform chrTransform;
     private Rigidbody2D rb2D;
+    private CharacterFeet feet;
     private GameObject self;
 
     private void Awake()
@@ -30,9 +37,14 @@ public class Character : MonoBehaviour, IDamageGettable
         anim = GetComponent<Animator>();
         chrTransform = transform;
         rb2D = GetComponent<Rigidbody2D>();
+        feet = GetComponentInChildren<CharacterFeet>();
         self = gameObject;
     }
 
+    /// <summary>
+    /// Override of <see cref="IDamageGettable.GetDamage(float)"/>. Deals damage to the character.
+    /// </summary>
+    /// <param name="damage">Damage the character gets</param>
     public void GetDamage(float damage)
     {
         health -= damage;
@@ -43,6 +55,9 @@ public class Character : MonoBehaviour, IDamageGettable
         }
     }
 
+    /// <summary>
+    /// Override of <see cref="IDamageGettable.OnDeath()"/>. Called when the character's health becomes 0.
+    /// </summary>
     public void OnDeath()
     {
 
@@ -68,6 +83,9 @@ public class Character : MonoBehaviour, IDamageGettable
         {
             anim.SetBool("isWalking", false);
         }
+
+        anim.SetBool("isLanding", isLanding);
+        anim.SetBool("isFallingDown", rb2D.velocity.y <= 0);
     }
 
     private void FixedUpdate()
@@ -113,5 +131,22 @@ public class Character : MonoBehaviour, IDamageGettable
         }
 
         rb2D.velocity = new Vector2(horzVel, rb2D.velocity.y);
+
+        if (Input.GetKey(jump) && isLanding)
+            rb2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (feet.IsLanding)
+            isLanding = true;
+        else
+            isLanding = false;
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (!feet.IsLanding)
+            isLanding = false;
     }
 }
