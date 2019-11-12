@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.U2D.IK;
 
 /// <summary>
 /// Script of all characters
@@ -18,6 +19,8 @@ public class Character : MonoBehaviour, IDamageGettable
     [SerializeField] private KeyCode moveRight = KeyCode.RightArrow;
     [SerializeField] private KeyCode jump = KeyCode.UpArrow;
     [SerializeField] private KeyCode interact = KeyCode.DownArrow;
+
+    [SerializeField] private LimbSolver2D[] solvers;
 
     private bool alive = true;
 
@@ -78,14 +81,31 @@ public class Character : MonoBehaviour, IDamageGettable
             else
                 scale.x = 1;
             chrTransform.localScale = scale;
+
+            SetSolverWeight(absVel / speed);
         }
         else
         {
             anim.SetBool("isWalking", false);
+            SetSolverWeight(1);
         }
 
         anim.SetBool("isLanding", isLanding);
         anim.SetBool("isFallingDown", rb2D.velocity.y <= 0);
+
+        if (!isLanding && !anim.GetBool("isFallingDown"))
+            SetSolverWeight(1);
+    }
+
+    private void SetSolverWeight(float weight)
+    {
+        if (weight < 0)
+            weight = 0;
+        if (weight > 1)
+            weight = 1;
+
+        for (int i = 0; i < solvers.Length; i++)
+            solvers[i].weight = weight;
     }
 
     private void FixedUpdate()
