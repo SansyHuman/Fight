@@ -12,9 +12,9 @@ public class Bullet : MonoBehaviour
         transform.position += velocity;
     }
 
-    public void SetVelocity(Vector3 _velocity)
+    public void SetVelocity(Vector3 velocity)
     {
-        velocity = _velocity;
+        this.velocity = velocity;
     } 
 
     void OnTriggerEnter(Collider collider)

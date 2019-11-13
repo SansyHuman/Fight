@@ -20,6 +20,10 @@ public class Character : MonoBehaviour, IDamageGettable
     [SerializeField] private KeyCode jump = KeyCode.UpArrow;
     [SerializeField] private KeyCode interact = KeyCode.DownArrow;
 
+    [SerializeField] private Gun weapon;
+    [SerializeField] private Transform weaponPosition;
+    [SerializeField] private Transform weaponArm;
+
     [SerializeField] private LimbSolver2D[] solvers;
 
     private bool alive = true;
@@ -42,6 +46,10 @@ public class Character : MonoBehaviour, IDamageGettable
         rb2D = GetComponent<Rigidbody2D>();
         feet = GetComponentInChildren<CharacterFeet>();
         self = gameObject;
+
+        Gun weapon = Instantiate<Gun>(this.weapon);
+        weapon.name = this.weapon.name;
+        weapon.Initialize(this, weaponArm, weaponPosition.localPosition);
     }
 
     /// <summary>

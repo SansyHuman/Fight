@@ -10,22 +10,25 @@ public class Gun : MonoBehaviour
     [SerializeField] private float shotCooldownTime = 0.5f;       // Delay time before next shot, mayb to be edit to rate of fire
     [SerializeField] private GameObject bulletPrefab;
     
-    private Transform rightHandTransform;
     private bool isShotOnCooldown = false;
-    private Transform bulletPivot;              //Pivot to determine where bullet will instantiate
-    private Transform barrelPivot;              //Pivot to determine the direction where bullet will shot
 
-    void Awake()
+    [SerializeField] private Transform rightHandPivot;
+    [SerializeField] private Transform bulletPivot;              //Pivot to determine where bullet will instantiate
+    [SerializeField] private Transform barrelPivot;              //Pivot to determine the direction where bullet will shot
+
+    private Character player;
+
+    public void Initialize(Character player, Transform arm, Vector3 relPivot)
     {
-        rightHandTransform = GameObject.Find("RightArmTarget").transform;  // BAD CODE
-        bulletPivot = transform.Find("BulletPivot");
-        barrelPivot = transform.Find("BarrelPivot");
+        transform.parent = arm;
+
+        Vector3 localPos = relPivot - rightHandPivot.localPosition;
+        transform.localPosition = localPos;
+        transform.localRotation = Quaternion.Euler(0, 0, 0);
     }
 
     void Update()
     {
-        transform.position = rightHandTransform.position;
-        transform.localRotation = Quaternion.Inverse(rightHandTransform.localRotation);
         if (Input.GetKeyDown(shoot) && !isShotOnCooldown)
         {
             Shoot();
