@@ -9,11 +9,11 @@ using UnityEngine.Experimental.U2D.IK;
 public class Character : MonoBehaviour, IDamageGettable
 {
     [SerializeField] private float health;
-    [SerializeField] [Range(0.0001f, 30)] private float speed = 3f;
-    [SerializeField] [Range(0.0001f, 60)] private float acceleration = 6f;
-    [SerializeField] [Range(0, 1)] private float airAccelerationMultiplier = 0.7f; // Acceleration multiplier when the character is in air.
-    [SerializeField] [Range(0.0001f, 120)] private float drag = 12f; // Drag acceleration when the movement key is not pressing.
-    [SerializeField] [Range(0.0001f, 500)] private float jumpForce = 80f;
+    [SerializeField] private float speed = 3f;
+    [SerializeField] private float acceleration = 6f;
+    [SerializeField] private float airAccelerationMultiplier = 0.7f; // Acceleration multiplier when the character is in air.
+    [SerializeField] private float drag = 12f; // Drag acceleration when the movement key is not pressing.
+    [SerializeField] private float jumpForce = 80f;
 
     [SerializeField] private KeyCode moveLeft = KeyCode.LeftArrow;
     [SerializeField] private KeyCode moveRight = KeyCode.RightArrow;
@@ -24,11 +24,11 @@ public class Character : MonoBehaviour, IDamageGettable
     [SerializeField] private Transform weaponPosition;
     [SerializeField] private Transform weaponArm;
 
-    [SerializeField] private LimbSolver2D[] solvers;
-
     private bool alive = true;
 
     private bool isLanding = false;
+
+    private Gun gunSlot;
 
     /// <value>Override of <see cref="IDamageGettable.Health"/>. Gets the health of the object.</value>
     public float Health => health;
@@ -37,6 +37,7 @@ public class Character : MonoBehaviour, IDamageGettable
     private Transform chrTransform;
     private Rigidbody2D rb2D;
     private CharacterFeet feet;
+    private IKManager2D manager;
     private GameObject self;
 
     private void Awake()
@@ -45,11 +46,12 @@ public class Character : MonoBehaviour, IDamageGettable
         chrTransform = transform;
         rb2D = GetComponent<Rigidbody2D>();
         feet = GetComponentInChildren<CharacterFeet>();
+        manager = GetComponent<IKManager2D>();
         self = gameObject;
 
-        Gun weapon = Instantiate<Gun>(this.weapon);
-        weapon.name = this.weapon.name;
-        weapon.Initialize(this, weaponArm, weaponPosition.localPosition);
+        gunSlot = Instantiate<Gun>(weapon);
+        gunSlot.name = weapon.name;
+        gunSlot.Initialize(this, weaponArm, weaponPosition.localPosition);
     }
 
     /// <summary>
@@ -62,6 +64,7 @@ public class Character : MonoBehaviour, IDamageGettable
         if (health < 0)
         {
             health = 0;
+            alive = false;
             OnDeath();
         }
     }
@@ -90,30 +93,46 @@ public class Character : MonoBehaviour, IDamageGettable
                 scale.x = 1;
             chrTransform.localScale = scale;
 
-            SetSolverWeight(absVel / speed);
+            if (gunSlot != null)
+                SetSolversWeight(absVel / speed);
         }
         else
         {
             anim.SetBool("isWalking", false);
-            SetSolverWeight(1);
+            SetSolversWeight(1);
         }
 
         anim.SetBool("isLanding", isLanding);
         anim.SetBool("isFallingDown", rb2D.velocity.y <= 0);
 
         if (!isLanding && !anim.GetBool("isFallingDown"))
-            SetSolverWeight(1);
+            SetSolversWeight(1);
+
+        if (gunSlot != null && gunSlot.Firing)
+            SetSolversWeight(1);
     }
 
-    private void SetSolverWeight(float weight)
+    private void SetSolversWeight(float weight)
     {
         if (weight < 0)
             weight = 0;
         if (weight > 1)
             weight = 1;
 
-        for (int i = 0; i < solvers.Length; i++)
-            solvers[i].weight = weight;
+        for (int i = 0; i < manager.solvers.Count; i++)
+            manager.solvers[i].weight = weight;
+    }
+
+    private void SetSolverWeight(string name, float weight)
+    {
+        for (int i = 0; i < manager.solvers.Count; i++)
+        {
+            if (name.Equals(manager.solvers[i].name))
+            {
+                manager.solvers[i].weight = weight;
+                break;
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -128,6 +147,8 @@ public class Character : MonoBehaviour, IDamageGettable
             horzInput = -1;
         if (Input.GetKey(moveRight))
             horzInput = 1;
+        if (gunSlot != null && gunSlot.Firing)
+            horzInput = isLanding ? 0 : horzInput;
 
         float horzVel = rb2D.velocity.x;
 
@@ -148,7 +169,11 @@ public class Character : MonoBehaviour, IDamageGettable
         }
         else
         {
-            horzVel += acceleration * horzInput * deltaTime;
+            float velDiff = acceleration * horzInput * deltaTime;
+            if (!isLanding)
+                velDiff *= airAccelerationMultiplier;
+
+            horzVel += velDiff;
             if (Mathf.Abs(horzVel) > speed)
             {
                 if (horzVel < 0)

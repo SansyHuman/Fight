@@ -12,6 +12,11 @@ public class Bullet : MonoBehaviour
         transform.position += velocity;
     }
 
+    private void OnBecameInvisible()
+    {
+        Destroy(gameObject);
+    }
+
     public void SetVelocity(Vector3 velocity)
     {
         this.velocity = velocity;

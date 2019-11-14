@@ -96,10 +96,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shoot: 32
-  moveLeft: 276
-  moveRight: 275
   shotCooldownTime: 0.1
-  bulletPrefab: {fileID: 6988022850445638570, guid: 1c33c11b2b7b1ca47b411606fad277d0,
+  bulletPrefab: {fileID: 6557370977978132520, guid: 1c33c11b2b7b1ca47b411606fad277d0,
     type: 3}
   rightHandPivot: {fileID: 1600280443758048933}
   bulletPivot: {fileID: 1600280444242395823}
