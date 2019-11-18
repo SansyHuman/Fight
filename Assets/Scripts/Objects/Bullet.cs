@@ -22,13 +22,12 @@ public class Bullet : MonoBehaviour
         this.velocity = velocity;
     } 
 
-    void OnTriggerEnter(Collider collider)
+    void OnTriggerEnter2D(Collider2D collider)
     {
-        print("oof");
-        if (collider.gameObject.name == "Stickman")
+        if (collider.CompareTag("Player"))
         {
-            print("ouch!!!!");
-            collider.gameObject.GetComponent<Character>().GetDamage(1.0f);
+            Debug.Log("Player " + collider.transform.parent.name + " hit by a bullet.");
+            collider.gameObject.GetComponentInParent<Character>().GetDamage(1.0f);
             Destroy(gameObject);
         }
     }

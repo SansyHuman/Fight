@@ -65,8 +65,6 @@ public class Gun : MonoBehaviour
             Shoot();
             chrAnim.SetBool("fired", false);
         }
-
-        Debug.Log("An");
     }
 
     private IEnumerator onShotCooldown()
@@ -87,6 +85,6 @@ public class Gun : MonoBehaviour
         Bullet bullet = Instantiate<Bullet>(bulletPrefab, bulletPivot.position, bulletPivot.rotation);
         Vector3 direction = bulletPivot.position - barrelPivot.position;
         direction.y = 0;
-        bullet.SetVelocity(direction * 3f);
+        bullet.SetVelocity(direction * 1.5f);
     }
 }
