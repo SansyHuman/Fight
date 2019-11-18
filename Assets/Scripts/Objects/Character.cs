@@ -81,7 +81,7 @@ public class Character : MonoBehaviour, IDamageGettable
     {
         float xVel = rb2D.velocity.x;
         float absVel = Mathf.Abs(xVel);
-        if (Mathf.Abs(xVel) > 0.0001f)
+        if (Mathf.Abs(xVel) > 0.8f)
         {
             anim.SetBool("isWalking", true);
             anim.SetFloat("walkSpeed", absVel * 2f / speed);

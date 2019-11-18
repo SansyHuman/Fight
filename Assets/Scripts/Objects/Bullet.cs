@@ -6,10 +6,14 @@ public class Bullet : MonoBehaviour
 {
     // Start is called before the first frame update
     private Vector3 velocity;
+    private Rigidbody2D rb;
+    private Collider2D collider;
 
-    void Update()
+    private void Awake()
     {
-        transform.position += velocity;
+        rb = gameObject.GetComponent<Rigidbody2D>();
+        rb.gravityScale = 0;
+        collider = gameObject.GetComponent<Collider2D>();
     }
 
     private void OnBecameInvisible()
@@ -19,16 +23,17 @@ public class Bullet : MonoBehaviour
 
     public void SetVelocity(Vector3 velocity)
     {
-        this.velocity = velocity;
+        rb.velocity = velocity;
     } 
 
-    void OnTriggerEnter2D(Collider2D collider)
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collider.CompareTag("Player"))
+        print(collision.transform.name);
+        if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Player " + collider.transform.parent.name + " hit by a bullet.");
-            collider.gameObject.GetComponentInParent<Character>().GetDamage(1.0f);
-            Destroy(gameObject);
+            Debug.Log("Player " + collision.transform.parent.name + " hit by a bullet.");
+            collision.gameObject.GetComponentInParent<Character>().GetDamage(1.0f);
         }
+        Destroy(gameObject);
     }
 }

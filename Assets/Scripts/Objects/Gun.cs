@@ -6,6 +6,7 @@ public class Gun : MonoBehaviour
 {
     [SerializeField] private KeyCode shoot = KeyCode.Space;          // BAD CODE
     [SerializeField] private float shotCooldownTime = 0.5f;       // Delay time before next shot, mayb to be edit to rate of fire
+    [SerializeField] private float gunForce = 100.0f;       // Speed of the bullet out of the barrel
     [SerializeField] private Bullet bulletPrefab;
     
     private bool isShotOnCooldown = false;
@@ -85,6 +86,6 @@ public class Gun : MonoBehaviour
         Bullet bullet = Instantiate<Bullet>(bulletPrefab, bulletPivot.position, bulletPivot.rotation);
         Vector3 direction = bulletPivot.position - barrelPivot.position;
         direction.y = 0;
-        bullet.SetVelocity(direction * 1.5f);
+        bullet.SetVelocity(direction * gunForce);
     }
 }
