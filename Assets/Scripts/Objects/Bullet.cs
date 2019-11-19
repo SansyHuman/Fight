@@ -4,16 +4,11 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    // Start is called before the first frame update
-    private Vector3 velocity;
     private Rigidbody2D rb;
-    private Collider2D collider;
 
     private void Awake()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
-        rb.gravityScale = 0;
-        collider = gameObject.GetComponent<Collider2D>();
     }
 
     private void OnBecameInvisible()
@@ -24,11 +19,10 @@ public class Bullet : MonoBehaviour
     public void SetVelocity(Vector3 velocity)
     {
         rb.velocity = velocity;
-    } 
+    }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        print(collision.transform.name);
         if (collision.gameObject.CompareTag("Player"))
         {
             Debug.Log("Player " + collision.transform.parent.name + " hit by a bullet.");
