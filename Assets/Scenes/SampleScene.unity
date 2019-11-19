@@ -735,6 +735,11 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0.0007112668
       objectReference: {fileID: 0}
+    - target: {fileID: 6827575493230418756, guid: 0e3ddef28b136ac41ba623352e81b444,
+        type: 3}
+      propertyPath: m_UseFullKinematicContacts
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e3ddef28b136ac41ba623352e81b444, type: 3}
 --- !u!1 &1227364735
