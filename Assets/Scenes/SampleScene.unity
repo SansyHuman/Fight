@@ -725,6 +725,11 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0.035733406
       objectReference: {fileID: 0}
+    - target: {fileID: 4375241375889503589, guid: 0e3ddef28b136ac41ba623352e81b444,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9993614
+      objectReference: {fileID: 0}
     - target: {fileID: 2281936218968995295, guid: 0e3ddef28b136ac41ba623352e81b444,
         type: 3}
       propertyPath: m_LocalRotation.z
@@ -765,7 +770,7 @@ EdgeCollider2D:
   m_UsedByEffector: 1
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_EdgeRadius: 0.2
+  m_EdgeRadius: 0.23
   m_Points:
   - {x: 0, y: 0}
   - {x: 0, y: -3}

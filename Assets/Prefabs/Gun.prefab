@@ -95,8 +95,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc27cea0ea8123d42bae34e6aab81027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shoot: 271
+  shoot: 32
   shotCooldownTime: 0.1
+  gunForce: 100
   bulletPrefab: {fileID: 6557370977978132520, guid: 1c33c11b2b7b1ca47b411606fad277d0,
     type: 3}
   rightHandPivot: {fileID: 1600280443758048933}
