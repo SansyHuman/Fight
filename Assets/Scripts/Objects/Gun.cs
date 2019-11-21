@@ -44,7 +44,7 @@ public class Gun : MonoBehaviour
             chrAnim.SetBool("firing", firing);
         }
         
-        if (Input.GetKeyDown(shoot) && !isShotOnCooldown)
+        if (Input.GetKeyDown(shoot) && !isShotOnCooldown && player.Controllable)
         {
             chrAnim.SetBool("fired", true);
             isShotOnCooldown = true;

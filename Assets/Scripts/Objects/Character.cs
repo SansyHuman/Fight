@@ -25,13 +25,17 @@ public class Character : MonoBehaviour, IDamageGettable
     [SerializeField] private Transform weaponArm;
 
     private bool alive = true;
+    private bool controllable = true;
 
     private bool isLanding = false;
+    private bool isHitting = false;
 
     private Gun gunSlot;
 
     /// <value>Override of <see cref="IDamageGettable.Health"/>. Gets the health of the object.</value>
     public float Health => health;
+    public bool Alive => alive;
+    public bool Controllable => controllable;
 
     private Animator anim;
     private Transform chrTransform;
@@ -61,7 +65,7 @@ public class Character : MonoBehaviour, IDamageGettable
     public void GetDamage(float damage)
     {
         health -= damage;
-        if (health < 0)
+        if (health <= 0)
         {
             health = 0;
             alive = false;
@@ -69,19 +73,44 @@ public class Character : MonoBehaviour, IDamageGettable
         }
     }
 
+    public void GetDamage(float damage, float knockBackForce, float knockBackDuration)
+    {
+        GetDamage(damage);
+
+        knockBackTime = 0;
+        this.knockBackDuration = knockBackDuration;
+        controllable = false;
+        isHitting = true;
+        anim.SetBool("hit", true);
+        anim.SetBool("isHitting", isHitting);
+
+        Vector3 scale = chrTransform.localScale;
+        if (knockBackForce < 0)
+            scale.x = 1;
+        if (knockBackForce > 0)
+            scale.x = -1;
+
+        chrTransform.localScale = scale;
+
+        rb2D.velocity = new Vector2(knockBackForce, rb2D.velocity.y);
+    }
+
     /// <summary>
     /// Override of <see cref="IDamageGettable.OnDeath()"/>. Called when the character's health becomes 0.
     /// </summary>
     public void OnDeath()
     {
-
+        anim.SetBool("dead", true);
     }
+
+    float knockBackTime = 0;
+    float knockBackDuration = 0;
 
     private void Update()
     {
         float xVel = rb2D.velocity.x;
         float absVel = Mathf.Abs(xVel);
-        if (Mathf.Abs(xVel) > 0.1f)
+        if (Mathf.Abs(xVel) > 0.1f && !isHitting)
         {
             anim.SetBool("isWalking", true);
             anim.SetFloat("walkSpeed", absVel * 2f / speed);
@@ -110,6 +139,12 @@ public class Character : MonoBehaviour, IDamageGettable
 
         if (gunSlot != null && gunSlot.Firing)
             SetSolversWeight(1);
+    }
+
+    private void LateUpdate()
+    {
+        if (anim.GetBool("hit"))
+            anim.SetBool("hit", false);
     }
 
     private void SetSolversWeight(float weight)
@@ -152,6 +187,22 @@ public class Character : MonoBehaviour, IDamageGettable
 
         float horzVel = rb2D.velocity.x;
 
+        if (!controllable)
+        {
+            if (isHitting)
+            {
+                knockBackTime += deltaTime;
+                horzVel *= 0.6f;
+                if (knockBackTime > knockBackDuration)
+                {
+                    isHitting = false;
+                    controllable = true;
+                    anim.SetBool("isHitting", isHitting);
+                }
+            }
+            goto VelocitySet;
+        }
+
         if (horzInput == 0)
         {
             if (horzVel < 0)
@@ -182,6 +233,8 @@ public class Character : MonoBehaviour, IDamageGettable
                     horzVel = speed;
             }
         }
+
+        VelocitySet:
 
         rb2D.velocity = new Vector2(horzVel, rb2D.velocity.y);
 
