@@ -44,7 +44,7 @@ public class Character : MonoBehaviour, IDamageGettable
     private IKManager2D manager;
     private GameObject self;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         anim = GetComponent<Animator>();
         chrTransform = transform;
