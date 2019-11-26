@@ -17,6 +17,30 @@ public class Toxictile : MonoBehaviour
     {
         P1health.Init(initHealth, initHealth);
         P2health.Init(initHealth, initHealth);
+        StartCoroutine(reFill());
+    }
+
+    bool check = true;
+
+    IEnumerator reFill()
+    {
+        while (check == true)
+        {
+            check = false;
+            if (P1health.MyCurrentValue == 0)
+            { 
+                P1health.Init(initHealth, initHealth);
+            }
+            
+            if (P2health.MyCurrentValue == 0)
+            {
+                P2health.Init(initHealth, initHealth);
+            }
+            yield return new WaitUntil(() => P1health.MyCurrentValue * P2health.MyCurrentValue == 0);
+            yield return new WaitForSeconds(3);
+            check = true;
+        }
+    
     }
 
     void Update()

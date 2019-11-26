@@ -9,8 +9,6 @@ public class Hp : MonoBehaviour
     [SerializeField] private float lerpSpeed;
     [SerializeField] private Text hpText;
 
-
-
     private float currentFill;
     private float MyMaxValue { get; set; }
     public float MyCurrentValue
@@ -29,12 +27,11 @@ public class Hp : MonoBehaviour
         }
     }
     private float currentValue;
-    
+
     void Start()
     {
         content = GetComponent<Image>();
     }
-
     
     void Update()
     {
