@@ -31,6 +31,7 @@ public class Character : MonoBehaviour, IDamageGettable
     private bool isHitting = false;
 
     private Gun gunSlot;
+    private Item itemSlot;
 
     /// <value>Override of <see cref="IDamageGettable.Health"/>. Gets the health of the object.</value>
     public float Health => health;
@@ -56,6 +57,10 @@ public class Character : MonoBehaviour, IDamageGettable
         gunSlot = Instantiate<Gun>(weapon);
         gunSlot.name = weapon.name;
         gunSlot.Initialize(this, weaponArm, weaponPosition.localPosition);
+
+        itemSlot = Instantiate<Gun>(item);
+        itemSlot.name = item.name;
+        itemSlot.Initialize(this, weaponArm, weaponPosition.localPosition);
     }
 
     /// <summary>
