@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1600280443188018367}
   - component: {fileID: 1600280443188018364}
-  - component: {fileID: 1600280443188018365}
   m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
@@ -72,7 +71,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 9e62b0c3c53e5ae48a82d06d23cfb905, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -80,29 +79,9 @@ SpriteRenderer:
   m_Size: {x: 0.64, y: 0.32}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1600280443188018365
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1600280443188018366}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc27cea0ea8123d42bae34e6aab81027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shoot: 32
-  shotCooldownTime: 0.1
-  gunForce: 100
-  bulletPrefab: {fileID: 6557370977978132520, guid: 1c33c11b2b7b1ca47b411606fad277d0,
-    type: 3}
-  rightHandPivot: {fileID: 1600280443758048933}
-  bulletPivot: {fileID: 1600280444242395823}
-  barrelPivot: {fileID: 1600280444140518572}
 --- !u!1 &1600280443758048932
 GameObject:
   m_ObjectHideFlags: 0

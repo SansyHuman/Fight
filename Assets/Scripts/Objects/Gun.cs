@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gun : MonoBehaviour
+public abstract class Gun : MonoBehaviour
 {
     [SerializeField] private KeyCode shoot = KeyCode.Space;          // BAD CODE
     [SerializeField] private float shotCooldownTime = 0.5f;       // Delay time before next shot, mayb to be edit to rate of fire
-    [SerializeField] private float gunForce = 100.0f;       // Speed of the bullet out of the barrel
+    [SerializeField] private float gunForce = 20.0f;       // Speed of the bullet out of the barrel
     [SerializeField] private Bullet bulletPrefab;
     
     private bool isShotOnCooldown = false;
@@ -44,7 +44,7 @@ public class Gun : MonoBehaviour
             chrAnim.SetBool("firing", firing);
         }
         
-        if (Input.GetKeyDown(shoot) && !isShotOnCooldown && player.Controllable)
+        if (Input.GetKey(shoot) && !isShotOnCooldown && player.Controllable)
         {
             chrAnim.SetBool("fired", true);
             isShotOnCooldown = true;
@@ -74,18 +74,31 @@ public class Gun : MonoBehaviour
         isShotOnCooldown = false;
     }
 
-    private void Shoot()
-    {
-        StartCoroutine(ShootBullet());
-    }
+    protected abstract void Shoot();
 
     WaitForSeconds wait = new WaitForSeconds(1 / 30f);
-    private IEnumerator ShootBullet()
+    protected IEnumerator ShootBullet()
     {
         yield return wait;
         Bullet bullet = Instantiate<Bullet>(bulletPrefab, bulletPivot.position, bulletPivot.rotation);
         Vector3 direction = bulletPivot.position - barrelPivot.position;
         direction.y = 0;
+        //Gun in Stick Fight shoot at the direction related to barrel, but for now we just make it on the x-axis
+        direction = direction.normalized;
+        bullet.SetVelocity(direction * gunForce);
+    }
+
+    //For gun that have spread angle ex.shotgun
+    //angle in degree
+    protected IEnumerator ShootBullet(float angle)
+    {
+        yield return wait;
+        Bullet bullet = Instantiate<Bullet>(bulletPrefab, bulletPivot.position, bulletPivot.rotation);
+        angle = Mathf.Deg2Rad * angle;
+        Vector2 direction = bulletPivot.position - barrelPivot.position;
+        direction.y = 0;
+        direction = direction.normalized;
+        direction = new Vector3(direction.x * Mathf.Cos(angle), Mathf.Sin(angle), 0);
         bullet.SetVelocity(direction * gunForce);
     }
 }
