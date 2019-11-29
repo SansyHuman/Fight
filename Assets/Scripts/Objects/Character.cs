@@ -19,6 +19,7 @@ public class Character : MonoBehaviour, IDamageGettable
     [SerializeField] private KeyCode moveRight = KeyCode.RightArrow;
     [SerializeField] private KeyCode jump = KeyCode.UpArrow;
     [SerializeField] private KeyCode interact = KeyCode.DownArrow;
+    [SerializeField] private KeyCode attack = KeyCode.Space; public KeyCode GetAttackKey() { return attack; } //Getter for gun to read
 
     [SerializeField] private Gun weapon;
     [SerializeField] private Transform weaponPosition;
@@ -57,6 +58,9 @@ public class Character : MonoBehaviour, IDamageGettable
         gunSlot.name = weapon.name;
         gunSlot.Initialize(this, weaponArm, weaponPosition.localPosition);
     }
+
+
+   
 
     /// <summary>
     /// Override of <see cref="IDamageGettable.GetDamage(float)"/>. Deals damage to the character.

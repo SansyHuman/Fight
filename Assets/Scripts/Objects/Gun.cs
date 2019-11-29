@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class Gun : MonoBehaviour
 {
-    [SerializeField] private KeyCode shoot = KeyCode.Space;          // BAD CODE
+    [SerializeField] private KeyCode shoot;
     [SerializeField] private float shotCooldownTime = 0.5f;       // Delay time before next shot, mayb to be edit to rate of fire
     [SerializeField] private float gunForce = 20.0f;       // Speed of the bullet out of the barrel
     [SerializeField] private Bullet bulletPrefab;
@@ -32,6 +32,7 @@ public abstract class Gun : MonoBehaviour
         Vector3 localPos = relPivot - rightHandPivot.localPosition;
         transform.localPosition = localPos;
         transform.localRotation = Quaternion.Euler(0, 0, 0);
+        shoot = player.GetAttackKey();
     }
 
     private float fireDuration = 0f;
