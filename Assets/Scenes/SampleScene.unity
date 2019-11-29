@@ -762,6 +762,12 @@ PrefabInstance:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3088859549359028193, guid: c93e17f46b015854fbdd3de01df6eb89,
+        type: 3}
+      propertyPath: weapon
+      value: 
+      objectReference: {fileID: -3576035568666096875, guid: 347e95f8e5cec89428731e28aa6c72da,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c93e17f46b015854fbdd3de01df6eb89, type: 3}
 --- !u!1 &361884749
@@ -1357,6 +1363,12 @@ PrefabInstance:
       propertyPath: health
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4375241376729793232, guid: 0e3ddef28b136ac41ba623352e81b444,
+        type: 3}
+      propertyPath: weapon
+      value: 
+      objectReference: {fileID: 3530978484430298566, guid: 9ed60cdab027fc1408fa786bf6eb008c,
+        type: 3}
     - target: {fileID: 4375241377152819875, guid: 0e3ddef28b136ac41ba623352e81b444,
         type: 3}
       propertyPath: m_LocalRotation.z
