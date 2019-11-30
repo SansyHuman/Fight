@@ -21,6 +21,7 @@ public class Character : MonoBehaviour, IDamageGettable
     [SerializeField] private KeyCode interact = KeyCode.DownArrow;
 
     [SerializeField] private Gun weapon;
+    [SerializeField] private Item item;
     [SerializeField] private Transform weaponPosition;
     [SerializeField] private Transform weaponArm;
 
@@ -58,9 +59,19 @@ public class Character : MonoBehaviour, IDamageGettable
         gunSlot.name = weapon.name;
         gunSlot.Initialize(this, weaponArm, weaponPosition.localPosition);
 
-        itemSlot = Instantiate<Gun>(item);
+        itemSlot = Instantiate<Item>(item);
         itemSlot.name = item.name;
-        itemSlot.Initialize(this, weaponArm, weaponPosition.localPosition);
+        itemSlot.Initialize(this);
+        
+    }
+
+    /// <summary>
+    /// Override of <see cref="IDamageGettable.GetHeal(float)"/>. Heal the character.
+    /// </summary>
+    /// <param name="heal">Healing the character gets</param>
+    public void GetHeal(float heal)
+    {
+        health += heal;
     }
 
     /// <summary>
