@@ -17,6 +17,8 @@ public class CharacterEditor : Editor
     SerializedProperty weaponPosition;
     SerializedProperty weaponArm;
 
+    SerializedProperty item;
+
     SerializedProperty moveLeft;
     SerializedProperty moveRight;
     SerializedProperty jump;
@@ -40,6 +42,8 @@ public class CharacterEditor : Editor
         weaponPosition = serializedObject.FindProperty("weaponPosition");
         weaponArm = serializedObject.FindProperty("weaponArm");
 
+        item = serializedObject.FindProperty("item");
+
         moveLeft = serializedObject.FindProperty("moveLeft");
         moveRight = serializedObject.FindProperty("moveRight");
         jump = serializedObject.FindProperty("jump");
@@ -49,6 +53,7 @@ public class CharacterEditor : Editor
 
     bool showCharacterProperties = true;
     bool showWeaponProperties = true;
+    bool showItemProperties = true;
     bool showKeyBindingProperties = true;
 
     GUIContent healthLbl = new GUIContent("Health", "Player's health.");
@@ -57,6 +62,8 @@ public class CharacterEditor : Editor
     GUIContent airAccelLbl = new GUIContent("Air Acceleration Multiplier", "Multiplier to the acceleration when the player is in the air.");
     GUIContent dragLbl = new GUIContent("Drag", "Drag acceleration when the player is not pressing the move key.");
     GUIContent jumpForceLbl = new GUIContent("Jump Force", "Force to jump.");
+
+    GUIContent itemLbl = new GUIContent("Item", "Item to use");
 
     GUIContent weaponLbl = new GUIContent("Weapon", "Weapon to use");
     GUIContent weaponPosLbl = new GUIContent("Weapon Position", "Child of the arm which will hold the weapon where the weapon will be.");
@@ -89,6 +96,15 @@ public class CharacterEditor : Editor
             EditorGUILayout.ObjectField(weapon, weaponLbl);
             EditorGUILayout.ObjectField(weaponPosition, weaponPosLbl);
             EditorGUILayout.ObjectField(weaponArm, weaponArmLbl);
+        }
+        EditorGUI.indentLevel--;
+        EditorGUILayout.Space();
+
+        showItemProperties = EditorGUILayout.Foldout(showItemProperties, "Item Properties", true);
+        EditorGUI.indentLevel++;
+        if (showItemProperties)
+        {
+            EditorGUILayout.ObjectField(item, itemLbl);
         }
         EditorGUI.indentLevel--;
         EditorGUILayout.Space();

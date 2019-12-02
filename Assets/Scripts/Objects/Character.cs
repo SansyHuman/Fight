@@ -22,6 +22,7 @@ public class Character : MonoBehaviour, IDamageGettable
     [SerializeField] private KeyCode attack = KeyCode.Space; public KeyCode GetAttackKey() { return attack; } //Getter for gun to read
 
     [SerializeField] private Gun weapon;
+    [SerializeField] private Item item;
     [SerializeField] private Transform weaponPosition;
     [SerializeField] private Transform weaponArm;
 
@@ -32,6 +33,7 @@ public class Character : MonoBehaviour, IDamageGettable
     private bool isHitting = false;
 
     private Gun gunSlot;
+    private Item itemSlot;
 
     /// <value>Override of <see cref="IDamageGettable.Health"/>. Gets the health of the object.</value>
     public float Health => health;
@@ -57,6 +59,20 @@ public class Character : MonoBehaviour, IDamageGettable
         gunSlot = Instantiate<Gun>(weapon);
         gunSlot.name = weapon.name;
         gunSlot.Initialize(this, weaponArm, weaponPosition.localPosition);
+
+        itemSlot = Instantiate<Item>(item);
+        itemSlot.name = item.name;
+        itemSlot.Initialize(this);
+        
+    }
+
+    /// <summary>
+    /// Override of <see cref="IDamageGettable.GetHeal(float)"/>. Heal the character.
+    /// </summary>
+    /// <param name="heal">Healing the character gets</param>
+    public void GetHeal(float heal)
+    {
+        health += heal;
     }
 
 
