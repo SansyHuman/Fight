@@ -23,6 +23,7 @@ public class CharacterEditor : Editor
     SerializedProperty moveRight;
     SerializedProperty jump;
     SerializedProperty interact;
+    SerializedProperty attack;
 
     protected Character targetCharacter;
 
@@ -47,6 +48,7 @@ public class CharacterEditor : Editor
         moveRight = serializedObject.FindProperty("moveRight");
         jump = serializedObject.FindProperty("jump");
         interact = serializedObject.FindProperty("interact");
+        attack = serializedObject.FindProperty("attack");
     }
 
     bool showCharacterProperties = true;
@@ -115,6 +117,7 @@ public class CharacterEditor : Editor
             EditorGUILayout.PropertyField(moveRight);
             EditorGUILayout.PropertyField(jump);
             EditorGUILayout.PropertyField(interact);
+            EditorGUILayout.PropertyField(attack);
         }
         EditorGUI.indentLevel--;
 
