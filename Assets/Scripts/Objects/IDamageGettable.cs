@@ -17,6 +17,12 @@ public interface IDamageGettable
     void GetDamage(float damage);
 
     /// <summary>
+    /// Heal the object with an amount.
+    /// </summary>
+    /// <param name="heal">Healing the object gets</param>
+    void GetHeal(float heal);
+
+    /// <summary>
     /// Called when the object's health becomes 0.
     /// </summary>
     void OnDeath();
